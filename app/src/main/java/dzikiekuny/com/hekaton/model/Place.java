@@ -1,0 +1,29 @@
+package dzikiekuny.com.hekaton.model;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
+
+/**
+ * Created by XHaXor on 02.06.2017.
+ */
+
+public class Place implements ClusterItem {
+
+    private final LatLng mPosition;
+    private String mTitle;
+
+    public Place(Double lat, Double lng, String title) {
+        mPosition = new LatLng(lat, lng);
+        mTitle = title;
+    }
+
+    @Override
+    public LatLng getPosition() {
+        return mPosition;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+}

@@ -4,6 +4,7 @@ package dzikiekuny.com.hekaton.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,24 +14,26 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterManager;
 
 import dzikiekuny.com.hekaton.R;
+import dzikiekuny.com.hekaton.model.Place;
 
 /**
  * Created by wodzu on 02.06.17.
  */
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
+
+    private LatLng slodowa = new LatLng(51.116162, 17.037725);
 
     private MapView mapView;
     private GoogleMap googleMap;
 
-    private LatLng slodowa = new LatLng(51.116162, 17.037725);
+    private ClusterManager<Place> clusterManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,30 +49,65 @@ public class MapFragment extends Fragment {
         mapView.onCreate(savedInstanceState);
 
         mapView.onResume(); // needed to get the map to display immediately
+
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
+        mapView.getMapAsync(this);
 
-                // For showing a move to my location button
-                // googleMap.setMyLocationEnabled(true); //TODO: uprawnienia do lokalizacji
-
-                //Marker pozycji wyspy
-                googleMap.addMarker(new MarkerOptions().position(slodowa).title("Slodowa").snippet("Słodowa w chuj").icon(BitmapDescriptorFactory
-                        .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(slodowa).zoom(16).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-            }
-        });
         return rootView;
 
     }
+
+    @Override
+    public void onMapReady(GoogleMap gMap) {
+        googleMap = gMap;
+
+        clusterManager = new ClusterManager<Place>(getContext(), googleMap);
+
+        googleMap.setOnCameraIdleListener(clusterManager);
+        googleMap.setOnMarkerClickListener(clusterManager);
+
+        clusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<Place>() {
+            @Override
+            public boolean onClusterClick(Cluster<Place> cluster) {
+                Log.i("XHaXor","Cluster clicked");
+                return false;
+            }
+        });
+
+        clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<Place>() {
+            @Override
+            public boolean onClusterItemClick(Place place) {
+                Log.i("XHaXor","Cluster item clicked");
+
+                return false;
+            }
+        });
+
+        addItems();
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(slodowa).zoom(10).build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    private void addItems() {
+
+        // Set some lat/lng coordinates to start with.
+        double lat = 51.116162;
+        double lng = 17.037725;
+
+        // Add ten cluster items in close proximity, for purposes of this example.
+        for (int i = 0; i < 10; i++) {
+            double offset = i / 100d;
+            lat = lat + offset;
+            lng = lng + offset;
+            Place offsetItem = new Place(lat, lng, "Test");
+            clusterManager.addItem(offsetItem);
+        }
+    }
+
 }
