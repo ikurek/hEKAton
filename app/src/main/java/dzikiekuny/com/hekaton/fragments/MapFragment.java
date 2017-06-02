@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import dzikiekuny.com.hekaton.R;
 import dzikiekuny.com.hekaton.model.Place;
@@ -34,6 +35,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap googleMap;
 
     private ClusterManager<Place> clusterManager;
+    private SlidingUpPanelLayout slidingLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +58,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             e.printStackTrace();
         }
 
+        slidingLayout = (SlidingUpPanelLayout) rootView.findViewById(R.id.sliding_layout);
+        slidingLayout.setPanelHeight(0);
+        slidingLayout.setTouchEnabled(false);
+        slidingLayout.setOverlayed(false);
+
         mapView.getMapAsync(this);
 
         return rootView;
@@ -64,12 +71,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap gMap) {
+
         googleMap = gMap;
 
         clusterManager = new ClusterManager<Place>(getContext(), googleMap);
 
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.setOnCameraIdleListener(clusterManager);
         googleMap.setOnMarkerClickListener(clusterManager);
+
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                slidingLayout.setPanelHeight(0);
+            }
+        });
 
         clusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<Place>() {
             @Override
@@ -83,7 +99,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public boolean onClusterItemClick(Place place) {
                 Log.i("XHaXor","Cluster item clicked");
-
+                slidingLayout.setPanelHeight(300);
                 return false;
             }
         });
