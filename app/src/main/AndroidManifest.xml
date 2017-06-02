@@ -19,6 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".fragments.AddNewActivity1"
+            android:label="Add new activity"/>
     </application>
 
 </manifest>

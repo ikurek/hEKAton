@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
@@ -13,45 +15,52 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_height="50dp">
+        android:layout_height="40dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="30dp"
+            android:textSize="25dp"
             android:layout_marginRight="70dp"
             android:gravity="center"
             android:text="12:59"
-            android:id="@+id/in_date" />
-
+            android:id="@+id/in_time" />
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
-            android:text="SELECT DATE"
             android:src="@drawable/ic_action_clock"
-            android:id="@+id/btn_date"
-/>
+            android:id="@+id/btn_time"/>
+
+
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="40dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_marginRight="70dp"
             android:layout_height="match_parent"
-            android:textSize="30dp"
+            android:textSize="25dp"
             android:gravity="center"
             android:text="21-09-2017"
-            android:id="@+id/in_time" />
+            android:id="@+id/in_date" />
 
         <ImageView
-            android:id="@+id/btn_time"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/btn_date"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_action_calendar_day"
-            android:text="SELECT TIME" />
+            android:src="@drawable/ic_action_calendar_day" />
+
     </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/sports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        app:anchor="center"
+        app:orientation="horizontal"/>
 </LinearLayout>

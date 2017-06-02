@@ -1,5 +1,6 @@
 package dzikiekuny.com.hekaton;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import dzikiekuny.com.hekaton.fragments.AddNewActivity1;
 import dzikiekuny.com.hekaton.fragments.MapFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -25,8 +27,10 @@ public class MainActivity extends AppCompatActivity
     private Fragment fragment;
     private FragmentManager fragmentManager;
     private MapFragment mapFragment = new MapFragment();
+    private AddNewActivity1 addNewActivity1 = new AddNewActivity1();
     private String currentFragmentTag;
     private static String MAP_STRING = "mapFragment";
+    private static String ADD_STRING = "addFragment";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +42,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(MainActivity.this, AddNewActivity1.class));
             }
         });
 
@@ -95,17 +98,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_list) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_map) {
             startMapFragment();
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_home) {
 
         }
 
@@ -115,6 +112,7 @@ public class MainActivity extends AppCompatActivity
     }
     private void startMapFragment(){
         if (fragment != null) {
+            fragment = mapFragment;
             fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             currentFragmentTag=MAP_STRING;
