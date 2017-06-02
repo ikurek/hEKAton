@@ -18,6 +18,15 @@ public class Place implements ClusterItem {
         mTitle = title;
     }
 
+    public Place(Double lat, Double lng){
+        mPosition = new LatLng(lat, lng);
+        mTitle = "";
+    }
+
+    public Place(LatLng latlng){
+        mPosition = latlng;
+    }
+
     @Override
     public LatLng getPosition() {
         return mPosition;

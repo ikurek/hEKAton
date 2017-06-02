@@ -61,7 +61,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         slidingLayout = (SlidingUpPanelLayout) rootView.findViewById(R.id.sliding_layout);
         slidingLayout.setPanelHeight(0);
         slidingLayout.setTouchEnabled(false);
-        slidingLayout.setOverlayed(false);
 
         mapView.getMapAsync(this);
 
@@ -75,6 +74,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         googleMap = gMap;
 
         clusterManager = new ClusterManager<Place>(getContext(), googleMap);
+
+        addItems();
 
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.setOnCameraIdleListener(clusterManager);
@@ -104,8 +105,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        addItems();
-
         CameraPosition cameraPosition = new CameraPosition.Builder().target(slodowa).zoom(10).build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
@@ -121,7 +120,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             double offset = i / 100d;
             lat = lat + offset;
             lng = lng + offset;
-            Place offsetItem = new Place(lat, lng, "Test");
+            Place offsetItem = new Place(lat, lng);
             clusterManager.addItem(offsetItem);
         }
     }
