@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        
+
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -28,7 +29,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBJQr9qH36UY-O_F5elR9Xnj1cu6ri3h0Y"/>
+            android:value="AIzaSyAK6exOMmLSNPlobjurYeKeOme-b3wVsfE"/>
 
         <activity
             android:name=".Activity.LoginActivity"
@@ -45,7 +46,6 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
 
         <activity android:name=".Activity.AddNewActivity" android:windowSoftInputMode="adjustNothing" ></activity>
 

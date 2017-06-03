@@ -11,6 +11,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -22,14 +30,17 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import dzikiekuny.com.hekaton.Models.Event;
+import java.util.ArrayList;
+
+import dzikiekuny.com.hekaton.Models.EventModel;
 import dzikiekuny.com.hekaton.Models.Sport;
 import dzikiekuny.com.hekaton.R;
-import dzikiekuny.com.hekaton.Models.Place;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by wodzu on 02.06.17.
@@ -37,22 +48,21 @@ import dzikiekuny.com.hekaton.Models.Place;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
+    String url = "http://dzikiekuny.azurewebsites.net/tables/events?ZUMO-API-VERSION=2.0.0";
     private LatLng slodowa = new LatLng(51.116162, 17.037725);
-
     private View rootView;
-
     private MapView mapView;
     private GoogleMap googleMap;
-
-    private ArrayList<Event> events;
-
-    private ClusterManager<Place> clusterManager;
+    private ArrayList<EventModel> events;
+    private ClusterManager<EventModel> clusterManager;
     private SlidingUpPanelLayout slidingLayout;
     private View slidingView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Nullable
@@ -86,9 +96,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         googleMap = gMap;
 
-        clusterManager = new ClusterManager<Place>(getActivity(), googleMap);
+        clusterManager = new ClusterManager<EventModel>(getActivity(), googleMap);
 
-        addItems();
+        DiskBasedCache cache = new DiskBasedCache(getApplicationContext().getCacheDir(), 1024 * 1024); // 1MB cap   //TODO: zapytac igora
+        BasicNetwork network = new BasicNetwork(new HurlStack());
+        RequestQueue mRequestQueue = new RequestQueue(cache, network);
+        mRequestQueue.start();
+        mRequestQueue.add(getEvents());
 
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.setOnCameraIdleListener(clusterManager);
@@ -101,22 +115,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        clusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<Place>() {
+        clusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<EventModel>() {
             @Override
-            public boolean onClusterClick(Cluster<Place> cluster) {
+            public boolean onClusterClick(Cluster<EventModel> cluster) {
                 Log.i("XHaXor","Cluster clicked");
                 return false;
             }
         });
 
-        clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<Place>() {
+        clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<EventModel>() {
             @Override
-            public boolean onClusterItemClick(Place place) {
+            public boolean onClusterItemClick(EventModel event) {
                 Log.i("XHaXor","Cluster item clicked");
                 //((TextView) rootView.findViewById(R.id.nameTextView)).setText(place.getTitle());
 
                 slidingLayout.setPanelHeight(300);
-                setSlidingView(place.getEvent());
+                setSlidingView(event);
                 return false;
             }
         });
@@ -125,36 +139,54 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    private void setSlidingView(Event ev) {
+    private void setSlidingView(EventModel ev) {
         ImageView iv = (ImageView) slidingLayout.findViewById(R.id.map_event_imageView);
         TextView title = (TextView) slidingLayout.findViewById(R.id.map_event_title);
         TextView subtitle = (TextView) slidingLayout.findViewById(R.id.map_event_subtitle);
 
-        iv.setImageDrawable(ev.getSport().getDrawable(getActivity().getApplicationContext()));
+        iv.setImageDrawable(Sport.valueOf(ev.getSportID()).getDrawable(getApplicationContext()));
         title.setText(ev.getName());
-        SimpleDateFormat formatter = new SimpleDateFormat("d MMM hh:mm");
-        subtitle.setText(formatter.format(ev.getDate()));
+        subtitle.setText(ev.getDeadlineDate());
 
     }
 
-    private void addItems() {
-
-        // TODO: Download events
-
-        events = new ArrayList<Event>();
-        double lat = 51.116162;
-        double lng = 17.037725;
-
-        for (int i=0; i<10; i++){
-            Event ev = new Event("Name " + i, "Desc", new Date(), lat, lng, Sport.Football);
-            double offset = i / 100d;
-            ev.setLat(lat+offset);
-            ev.setLng(lng+offset);
-            events.add(ev);
-            clusterManager.addItem(new Place(ev));
+    public ArrayList<EventModel> jsonEventsParser(JSONArray eventsArray) throws JSONException {
+        ArrayList<EventModel> events = new ArrayList<>();
+        for (int i = 0; i < eventsArray.length(); ++i) {
+            JSONObject eventObject = eventsArray.getJSONObject(i);
+            events.add(new EventModel(eventObject.getString("name"), eventObject.getString("deadline_date"), eventObject.getString("user_id"), eventObject.getString("description"), eventObject.getString("members"), eventObject.getString("lat"), eventObject.getString("lng"), eventObject.getString("sport_id"), eventObject.getString("id")));
         }
-
+        return events;
 
     }
+
+    private JsonArrayRequest getEvents() {
+        return new JsonArrayRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            events = jsonEventsParser(response);
+                            Log.i("Events size", String.valueOf(events.size()));
+
+                            for (EventModel eventModel : events) {
+                                clusterManager.addItem(eventModel);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+    }
+
 
 }
