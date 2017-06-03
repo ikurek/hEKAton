@@ -23,12 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCxhvvsYtJwEDgCsIDiMBlNk7uDU7BqAa4"/>
-
-
+        <activity android:name=".EventListActivity"></activity>
     </application>
 
 </manifest>
