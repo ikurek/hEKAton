@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,6 +22,7 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import dzikiekuny.com.hekaton.Models.Event;
@@ -44,6 +46,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private ClusterManager<Place> clusterManager;
     private SlidingUpPanelLayout slidingLayout;
+    private View slidingView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,9 +70,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         slidingLayout = (SlidingUpPanelLayout) rootView.findViewById(R.id.sliding_layout);
+        slidingView = rootView.findViewById(R.id.event_contentView);
         slidingLayout.setPanelHeight(0);
         slidingLayout.setTouchEnabled(false);
+        slidingLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
         mapView.getMapAsync(this);
 
         return rootView;
@@ -107,9 +116,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public boolean onClusterItemClick(Place place) {
                 Log.i("XHaXor","Cluster item clicked");
-                ((TextView) rootView.findViewById(R.id.nameTextView)).setText(place.getTitle());
+               //((TextView) rootView.findViewById(R.id.nameTextView)).setText(place.getTitle());
 
                 slidingLayout.setPanelHeight(300);
+                setSlidingView(place.getEvent());
                 return false;
             }
         });
@@ -118,33 +128,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
+    private void setSlidingView(Event ev) {
+        ImageView iv = (ImageView) slidingLayout.findViewById(R.id.map_event_imageView);
+        TextView title = (TextView) slidingLayout.findViewById(R.id.map_event_title);
+        TextView subtitle = (TextView) slidingLayout.findViewById(R.id.map_event_subtitle);
+
+        iv.setImageDrawable(ev.getSport().getDrawable(getContext()));
+        title.setText(ev.getName());
+        SimpleDateFormat formatter = new SimpleDateFormat("d MMM hh:mm");
+        subtitle.setText(formatter.format(ev.getDate()));
+
+    }
+
     private void addItems() {
 
         // TODO: Download events
 
         events = new ArrayList<Event>();
-        for (int i=0; i<10; i++){
-            events.add(new Event());
-        }
-
-        for (Event e : events) {
-            clusterManager.addItem(new Place(new LatLng(e.getLat(), e.getLng())));
-        }
-
-        // TODO: Later delete, just for tests
-
-        // Set some lat/lng coordinates to start with.
         double lat = 51.116162;
         double lng = 17.037725;
 
-        // Add ten cluster items in close proximity, for purposes of this example.
-        for (int i = 0; i < 10; i++) {
+        for (int i=0; i<10; i++){
+            Event ev = new Event();
+            events.add(new Event());
             double offset = i / 100d;
-            lat = lat + offset;
-            lng = lng + offset;
-            Place offsetItem = new Place(lat, lng, "Test " + Integer.toString(i));
-            clusterManager.addItem(offsetItem);
+            ev.setLat(lat+offset);
+            ev.setLng(lng+offset);
+            clusterManager.addItem(new Place(ev));
         }
+
+
     }
 
 }

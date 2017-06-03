@@ -24,7 +24,12 @@ public class Event {
     }
 
     public Event() {
-
+        this.name = "Besztanie androida";
+        this.description = "wspolne besztanie chujowego systemy";
+        this.date = new Date();
+        this.lat= 54.3;
+        this.lng= 54.3;
+        this.sport = Sport.Running;
     }
 
 

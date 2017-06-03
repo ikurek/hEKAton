@@ -19,71 +19,67 @@
         sothree:umanoShadowHeight="4dp">
 
         <View
+            android:id="@+id/event_contentView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center" />
 
-        <LinearLayout
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:weightSum="12"
-            xmlns:android="http://schemas.android.com/apk/res/android">
-
-            <RelativeLayout
-                android:id="@+id/dragView"
+            <LinearLayout
+                android:id="@+id/event_linear"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@android:color/white"
                 android:clickable="true"
-                android:focusable="false"
-                android:background="@color/colorPrimaryDark"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/nameTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                 <ImageView
+                    android:id="@+id/map_event_imageView"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:layout_alignParentStart="true"
-                    android:layout_alignTop="@+id/transparentTopSliderView"
-                    android:layout_below="@id/transparentTopSliderView"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_toStartOf="@+id/clubPhotoCircleImageView"
-                    android:paddingTop="20dp"
-                    android:text="SIEMA"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/basketball"
+                    android:layout_marginLeft="12dp"/>
 
-                <ImageView
-                    android:id="@+id/arrowUpImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@id/nameTextView"
-                    android:layout_marginStart="10dp"
-                    android:paddingTop="20dp"
-                    android:src="@drawable/ic_menu_camera" />
-
-                <TextView
-                    android:id="@+id/moreInfoTextView"
+                <LinearLayout
+                    android:id="@+id/map_event_text_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/nameTextView"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@id/arrowUpImageView"
-                    android:layout_toStartOf="@+id/clubPhotoCircleImageView"
-                    android:paddingTop="20dp"
-                    android:text="ELO"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="32dp"
+                    android:orientation="vertical">
 
 
-            </RelativeLayout>
+                    <TextView
+                        android:id="@+id/map_event_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="title "
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/map_event_subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/event_title"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="2dp"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:text="subtitle"
+                        android:textSize="16sp" />
 
 
+                </LinearLayout>
 
-        </LinearLayout>
+            </LinearLayout>
+
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </RelativeLayout>
