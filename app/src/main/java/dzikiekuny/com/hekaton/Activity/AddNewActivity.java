@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -66,6 +65,7 @@ public class AddNewActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.add_new);
         this.setTitle("");
         DiskBasedCache cache = new DiskBasedCache(getApplicationContext().getCacheDir(), 1024 * 1024); // 1MB cap   //TODO: zapytac igora
@@ -82,6 +82,10 @@ public class AddNewActivity extends AppCompatActivity {
         ImageView chooseLocation = (ImageView) findViewById(R.id.choose_location);
         sports = (RecyclerView) findViewById(R.id.sports);
 
+        Button b = (Button) findViewById(R.id.save);
+        b.setEnabled(false);
+        b.setAlpha(0.5f);
+
         final TextView txtTime = (TextView) findViewById(R.id.in_time);
         final TextView txtDate = (TextView) findViewById(R.id.in_date);
         location = (TextView) findViewById(R.id.location);
@@ -93,8 +97,37 @@ public class AddNewActivity extends AppCompatActivity {
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
 
-        txtTime.setText(mHour + ":" + mMinute);
-        txtDate.setText(mDay + "-" + (mMonth + 1) + "-" + mYear);
+        String txtHour;
+        if (mHour < 10){
+            txtHour = "0"+Integer.toString(mHour);
+        } else {
+            txtHour = Integer.toString(mHour);
+        }
+
+        String txtMin;
+        if (mMinute < 10) {
+            txtMin = "0"+Integer.toString(mMinute);
+        } else {
+            txtMin = Integer.toString(mMinute);
+        }
+
+        txtTime.setText(txtHour + ":" + txtMin);
+
+        String txtDay, txtMon;
+
+        if (mDay < 10) {
+            txtDay = "0"+ Integer.toString(mDay);
+        } else {
+            txtDay = Integer.toString(mDay);
+        }
+
+        if (mMonth < 9) {
+            txtMon = "0" + Integer.toString(mMonth+1);
+        } else {
+            txtMon = Integer.toString(mMonth+1);
+        }
+
+        txtDate.setText(txtDay + "-" + txtMon + "-" + mYear);
 
         for (Sport sp : Sport.values()) {
             userList.add(sp);
