@@ -1,4 +1,4 @@
-package dzikiekuny.com.hekaton.fragments;
+package dzikiekuny.com.hekaton.Fragments;
 
 
 import android.os.Bundle;
@@ -24,8 +24,8 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.ArrayList;
 
 import dzikiekuny.com.hekaton.Models.Event;
-import dzikiekuny.com.hekaton.R;
 import dzikiekuny.com.hekaton.Models.Place;
+import dzikiekuny.com.hekaton.R;
 
 /**
  * Created by wodzu on 02.06.17.
@@ -80,7 +80,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         googleMap = gMap;
 
-        clusterManager = new ClusterManager<Place>(getContext(), googleMap);
+        clusterManager = new ClusterManager<>(getContext(), googleMap);
 
         addItems();
 
@@ -123,7 +123,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // TODO: Download events
 
         events = new ArrayList<Event>();
-        for (int i=0; i<10; i++){
+        for (int i = 0; i < 10; i++) {
             events.add(new Event());
         }
 

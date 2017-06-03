@@ -16,10 +16,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.facebook.Profile;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import dzikiekuny.com.hekaton.Activity.AddNewActivity;
 import dzikiekuny.com.hekaton.Activity.EventListActivity;
-import dzikiekuny.com.hekaton.fragments.MapFragment;
+import dzikiekuny.com.hekaton.Fragments.MapFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity
     private FragmentManager fragmentManager;
     private MapFragment mapFragment = new MapFragment();
     private String currentFragmentTag;
+    private View headerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,13 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        headerView = navigationView.getHeaderView(0);
+
+        CircleImageView profilePicture = (CircleImageView) headerView.findViewById(R.id.imageView);
+        TextView userTextView = (TextView) headerView.findViewById(R.id.nameLabel);
+        Glide.with(MainActivity.this).load("https://graph.facebook.com/" + Profile.getCurrentProfile().getId() + "/picture?type=large").into(profilePicture);
+        userTextView.setText(Profile.getCurrentProfile().getName());
+
         fragment = mapFragment;
         fragmentManager = getSupportFragmentManager();
         currentFragmentTag = MAP_STRING;
