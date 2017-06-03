@@ -16,21 +16,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.bumptech.glide.Glide;
+import com.facebook.Profile;
 
-import dzikiekuny.com.hekaton.fragments.AddNewActivity1;
-import dzikiekuny.com.hekaton.fragments.MapFragment;
+import de.hdodenhof.circleimageview.CircleImageView;
+import dzikiekuny.com.hekaton.Activity.AddNewActivity;
+import dzikiekuny.com.hekaton.Activity.EventListActivity;
+import dzikiekuny.com.hekaton.Fragments.MapFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static String MAP_STRING = "mapFragment";
     private Fragment fragment;
     private FragmentManager fragmentManager;
     private MapFragment mapFragment = new MapFragment();
-    private AddNewActivity1 addNewActivity1 = new AddNewActivity1();
     private String currentFragmentTag;
-    private static String MAP_STRING = "mapFragment";
-    private static String ADD_STRING = "addFragment";
+    private View headerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +46,9 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, AddNewActivity1.class));
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                startActivity(new Intent(MainActivity.this, AddNewActivity.class));
             }
         });
 
@@ -54,6 +60,13 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        headerView = navigationView.getHeaderView(0);
+
+        CircleImageView profilePicture = (CircleImageView) headerView.findViewById(R.id.imageView);
+        TextView userTextView = (TextView) headerView.findViewById(R.id.nameLabel);
+        Glide.with(MainActivity.this).load("https://graph.facebook.com/" + Profile.getCurrentProfile().getId() + "/picture?type=large").into(profilePicture);
+        userTextView.setText(Profile.getCurrentProfile().getName());
+
         fragment = mapFragment;
         fragmentManager = getSupportFragmentManager();
         currentFragmentTag = MAP_STRING;
@@ -98,12 +111,9 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_list) {
-            // Handle the camera action
-        } else if (id == R.id.nav_map) {
-            startMapFragment();
-        } else if (id == R.id.nav_home) {
-
+        if(id == R.id.nav_list) {
+            Intent i = new Intent(MainActivity.this, EventListActivity.class);
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -112,7 +122,6 @@ public class MainActivity extends AppCompatActivity
     }
     private void startMapFragment(){
         if (fragment != null) {
-            fragment = mapFragment;
             fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             currentFragmentTag=MAP_STRING;

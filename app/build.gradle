@@ -29,5 +29,19 @@ dependencies {
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.google.android.gms:play-services-base:10.2.4'
+    compile 'com.google.android.gms:play-services-location:10.2.4'
+    compile 'com.google.android.gms:play-services-maps:10.2.4'
+    compile 'com.google.maps.android:android-maps-utils:0.4.4'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
+    compile 'com.facebook.android:facebook-android-sdk:4.9.0'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.github.bumptech.glide:glide:4.0.0-RC0'
     testCompile 'junit:junit:4.12'
+
+    repositories {
+        mavenCentral()
+    }
+    compile 'com.sothree.slidinguppanel:library:3.3.1'
 }
