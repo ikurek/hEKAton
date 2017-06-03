@@ -257,7 +257,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         iv.setImageDrawable(Sport.valueOf(ev.getSportID()).getDrawable(getApplicationContext()));
         title.setText(ev.getName());
-        subtitle.setText(ev.getDeadlineDate());
+        subtitle.setText(((ev.getDeadlineDate()).toString()).substring(0,16));
 
     }
     public EventModel jsonEventParser(JSONObject eventObject) throws JSONException {
