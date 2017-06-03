@@ -24,6 +24,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.facebook.Profile;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -56,6 +57,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     String url = "http://dzikiekuny.azurewebsites.net/tables/events?ZUMO-API-VERSION=2.0.0";
+    String url1 = "http://dzikiekuny.azurewebsites.net/tables/users?ZUMO-API-VERSION=2.0.0";
     private LatLng slodowa = new LatLng(51.116162, 17.037725);
     private View rootView;
     private MapView mapView;
@@ -65,6 +67,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private SlidingUpPanelLayout slidingLayout;
     RequestQueue mRequestQueue;
     private View slidingView;
+    private UserModel myUser;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +81,39 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
     }
+    public UserModel jsonUsersParser(JSONArray users, String fbID) throws JSONException {
+        for(int i = 0; i<users.length(); ++i){
+            if(users.getJSONObject(i).getString("fbid").equals(fbID)) {
+                JSONObject userObject = users.getJSONObject(i);
+                return new UserModel(userObject.getString("name"), userObject.getString("fbid"), userObject.getString("joined"), userObject.getString("id"));
+            }
+        }
+        return null;
 
+    }
+    private JsonArrayRequest getUserFacebook(final String facebookID) {
+        return new JsonArrayRequest
+                (Request.Method.GET, url1, null, new Response.Listener<JSONArray>() {
+
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            myUser = jsonUsersParser(response, facebookID);
+                            if(myUser==null)
+                                Log.i("CHuj", ":(((");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -117,7 +152,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mRequestQueue = new RequestQueue(cache, network);
         mRequestQueue.start();
         mRequestQueue.add(getEvents());
-
+        mRequestQueue.add(getUserFacebook(Profile.getCurrentProfile().getId()));
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.setOnCameraIdleListener(clusterManager);
         googleMap.setOnMarkerClickListener(clusterManager);
@@ -154,6 +189,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setSlidingView(final EventModel ev) {
+        if(myUser!=null)
         slidingView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,7 +227,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 md.customView(stdView, false);
                 String guzik;
-                if (true)
+
+                if (false)
                     guzik = "Wyjdź";
                 else
                     guzik = "Dolacz";
@@ -201,7 +238,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
+                                UserModel newUser = new UserModel(myUser.getName(), myUser.getFbid(), myUser.getJoined(), myUser.getId());
+                                if(newUser.getJoined().length()<3)
+                                    newUser.setJoined(ev.getId());
+                                else
+                                    newUser.setJoined(newUser.getJoined()+"☺"+ev.getId());
+                                mRequestQueue.add(updateUser(newUser, newUser.getId()));
+                                mRequestQueue.add(getEvent(ev.getId()));
                             }
                         })
                         .build()
@@ -217,7 +260,91 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         subtitle.setText(ev.getDeadlineDate());
 
     }
+    public EventModel jsonEventParser(JSONObject eventObject) throws JSONException {
 
+        return new EventModel(eventObject.getString("name"), eventObject.getString("deadline_date"), eventObject.getString("user_id"), eventObject.getString("description"), eventObject.getString("members"), eventObject.getString("lat"), eventObject.getString("lng"), eventObject.getString("sport_id"), eventObject.getString("id"));
+
+    }
+    private JsonObjectRequest updateEvent(EventModel event, String eventID){
+        JSONObject params = new JSONObject();
+        try {
+            params.put("name", event.getName());
+            params.put("deadline_date", event.getDeadlineDate());
+            params.put("user_id", event.getUserID());
+            params.put("description", event.getDescription());
+            params.put("members", event.getMembers());
+            params.put("lat", event.getLat());
+            params.put("lng", event.getLng());
+            params.put("sport_id", event.getSportID());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new JsonObjectRequest(Request.Method.PATCH,  "http://dzikiekuny.azurewebsites.net/tables/events/"+eventID+"?ZUMO-API-VERSION=2.0.0", params,  new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("Działa", response.toString());
+                // pDialog.hide();
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error volley", "Error: " + error.getMessage());
+                //pDialog.hide();
+            }
+        });
+    }
+    private JsonObjectRequest getEvent(String eventID){
+        Log.i("Event link", "http://dzikiekuny.azurewebsites.net/tables/events/"+eventID+"?ZUMO-API-VERSION=2.0.0");
+        return new JsonObjectRequest
+                (Request.Method.GET, "http://dzikiekuny.azurewebsites.net/tables/events/"+eventID+"?ZUMO-API-VERSION=2.0.0", null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            EventModel myEvent =  jsonEventParser(response);
+                            myEvent.setMembers(myEvent.getMembers()+"☺"+myUser.getId());
+                            mRequestQueue.add(updateEvent(myEvent, myEvent.getId()));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+    }
+    private JsonObjectRequest updateUser(UserModel user, String userID){
+        JSONObject params = new JSONObject();
+        try {
+            params.put("name", user.getName());
+            params.put("fbid", user.getFbid());
+            params.put("joined", user.getJoined());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new JsonObjectRequest(Request.Method.PATCH,  "http://dzikiekuny.azurewebsites.net/tables/users/"+userID+"?ZUMO-API-VERSION=2.0.0", params,  new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("Działa", response.toString());
+                // pDialog.hide();
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error volley", "Error: " + error.getMessage());
+                //pDialog.hide();
+            }
+        });
+    }
     public ArrayList<EventModel> jsonEventsParser(JSONArray eventsArray) throws JSONException {
         ArrayList<EventModel> events = new ArrayList<>();
         for (int i = 0; i < eventsArray.length(); ++i) {

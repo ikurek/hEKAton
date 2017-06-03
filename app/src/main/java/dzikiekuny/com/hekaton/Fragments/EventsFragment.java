@@ -77,6 +77,7 @@ public class EventsFragment extends Fragment {
                     public void onResponse(JSONArray response) {
                         try {
                             myUser = jsonUsersParser(response, facebookID);
+                            events.clear();
                             String[] eventsID = myUser.getJoined().split("☺");
                             for(int i = 0; i<eventsID.length; ++i){
                                 mRequestQueue.add(getEvent(eventsID[i]));
