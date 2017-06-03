@@ -2,7 +2,6 @@ package dzikiekuny.com.hekaton.Fragments;
 
 
 import android.os.Bundle;
-import android.os.UserManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,23 +25,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import dzikiekuny.com.hekaton.Adapter.EventAdapter;
-import dzikiekuny.com.hekaton.Models.Event;
 import dzikiekuny.com.hekaton.Models.EventModel;
-import dzikiekuny.com.hekaton.Models.Sport;
 import dzikiekuny.com.hekaton.Models.UserModel;
 import dzikiekuny.com.hekaton.R;
 
 public class EventsFragment extends Fragment {
     String url = "http://dzikiekuny.azurewebsites.net/tables/users?ZUMO-API-VERSION=2.0.0";
     String url1 = "http://dzikiekuny.azurewebsites.net/tables/events?ZUMO-API-VERSION=2.0.0";
+    EventAdapter adapter;
+    ArrayList<EventModel> events = new ArrayList<>();
     private ListView listView;
     private UserModel myUser;
-    EventAdapter adapter;
     private RequestQueue mRequestQueue;
-    ArrayList<EventModel> events = new ArrayList<>();
     public EventsFragment() {
         // Required empty public constructor
     }
