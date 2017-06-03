@@ -28,6 +28,14 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
     private int last = -1;
     private int prelast = -1; // XD XD XD
 
+    public int currentSelected() {
+        if (last == -1 || last!=pressed) {
+            return pressed;
+        } else {
+            return -1;
+        }
+    }
+
     public SportAdapter(List<Sport> userList, Context context, AddNewActivity activity) {
         this.sportList = userList;
         this.mContext = context;
@@ -50,10 +58,10 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
         if(position!=pressed)
             holder.tick.setVisibility(View.INVISIBLE);
         else {
-            Log.i("Klik - pozycja", String.valueOf(position));
-            Log.i("Last", String.valueOf(last));
-            Log.i("Pressed", String.valueOf(pressed));
-            Log.i("Prelast", String.valueOf(prelast));
+            //Log.i("Klik - pozycja", String.valueOf(position));
+            //Log.i("Last", String.valueOf(last));
+            //Log.i("Pressed", String.valueOf(pressed));
+            //Log.i("Prelast", String.valueOf(prelast));
             if (last == pressed){
                 if (prelast==pressed) {
                     holder.tick.setVisibility(View.VISIBLE);
@@ -73,11 +81,6 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
                 last = pressed;
                 pressed = position;
             }
-            if (pressed!=-1){
-                mActivity.setTitle(Sport.values()[pressed].toString());
-            } else {
-                mActivity.setTitle("");
-            }
 
         }
 
@@ -89,6 +92,8 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
                 pressed=position;
 
                 mActivity.refresh();
+
+                Log.i("Pressed", Integer.toString(currentSelected()));
             }
         });
     }

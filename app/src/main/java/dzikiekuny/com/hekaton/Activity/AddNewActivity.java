@@ -115,7 +115,7 @@ public class AddNewActivity extends AppCompatActivity {
     }
 
     public void refresh(){
-        sports.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 }
