@@ -20,6 +20,9 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.ArrayList;
+
+import dzikiekuny.com.hekaton.Models.Event;
 import dzikiekuny.com.hekaton.R;
 import dzikiekuny.com.hekaton.model.Place;
 
@@ -33,6 +36,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap googleMap;
+
+    private ArrayList<Event> events;
 
     private ClusterManager<Place> clusterManager;
     private SlidingUpPanelLayout slidingLayout;
@@ -111,6 +116,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void addItems() {
 
+        // TODO: Download events
+
+        events = new ArrayList<Event>();
+        for (int i=0; i<10; i++){
+            events.add(new Event());
+        }
+
+        for (Event e : events) {
+            clusterManager.addItem(new Place(new LatLng(e.getLat(), e.getLng())));
+        }
+
+        // TODO: Later delete, just for tests
+
         // Set some lat/lng coordinates to start with.
         double lat = 51.116162;
         double lng = 17.037725;
@@ -120,7 +138,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             double offset = i / 100d;
             lat = lat + offset;
             lng = lng + offset;
-            Place offsetItem = new Place(lat, lng);
+            Place offsetItem = new Place(lat, lng, "Test " + Integer.toString(i));
             clusterManager.addItem(offsetItem);
         }
     }
