@@ -2,7 +2,6 @@ package dzikiekuny.com.hekaton.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,24 +19,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import dzikiekuny.com.hekaton.Models.Event;
 import dzikiekuny.com.hekaton.Models.EventModel;
 import dzikiekuny.com.hekaton.Models.Sport;
 import dzikiekuny.com.hekaton.Models.UserModel;
 import dzikiekuny.com.hekaton.R;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by kacperraczy on 03.06.2017.
