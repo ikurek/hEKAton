@@ -11,11 +11,13 @@ public class Event {
     private double lng;
     private Sport sport;
 
-    public Event(Map<String, Object> dict) {
-        name = (String) dict.get("name");
-        description = (String) dict.get("desc");
-        //...
-
+    public Event(String name, String description, Date date, Double lat, Double lng, Sport sport) {
+        this.name = name;
+        this.description = description;
+        this.date = date;
+        this.lat = lat;
+        this.lng = lng;
+        this.sport = sport;
     }
 
     public Event() {

@@ -3,6 +3,8 @@ package dzikiekuny.com.hekaton.Models;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
+import dzikiekuny.com.hekaton.Models.Event;
+
 
 /**
  * Created by XHaXor on 02.06.2017.
@@ -10,18 +12,14 @@ import com.google.maps.android.clustering.ClusterItem;
 
 public class Place implements ClusterItem {
 
+    private Event event;
     private final LatLng mPosition;
-    private String mTitle;
 
-    public Place(Double lat, Double lng, String title) {
-        mPosition = new LatLng(lat, lng);
-        mTitle = title;
+    public Place(Event ev) {
+        event = ev;
+        mPosition = new LatLng(ev.getLat(), ev.getLng());
     }
 
-    public Place(Double lat, Double lng){
-        mPosition = new LatLng(lat, lng);
-        mTitle = "";
-    }
 
     public Place(LatLng latlng){
         mPosition = latlng;
@@ -32,7 +30,7 @@ public class Place implements ClusterItem {
         return mPosition;
     }
 
-    public String getTitle() {
-        return mTitle;
+    public Event getEvent() {
+        return event;
     }
 }
