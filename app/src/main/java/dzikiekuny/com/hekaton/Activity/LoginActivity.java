@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     if (myUser == null) {
                                         Log.e("setUpFacebookLogin", "Creating new user: " + userFacebookID);
-                                        databaseSupport.insertUserAsModel(new UserModel(userName, userFacebookID, "XD"));
+                                        databaseSupport.insertUserAsModel(new UserModel(userName, userFacebookID));
                                     } else {
                                         Log.e("setUpFacebookLogin", "Found user: " + myUser.getName());
                                     }
@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences sharedPref = LoginActivity.this.getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("facebookid", userFacebookID);
-                editor.commit();
+                editor.apply();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 Log.e("Facebook id", loginResult.getAccessToken().getUserId());
             }

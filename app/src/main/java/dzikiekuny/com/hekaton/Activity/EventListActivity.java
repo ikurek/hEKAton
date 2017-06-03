@@ -32,7 +32,7 @@ public class EventListActivity extends Activity {
         for(int i = 0; i<2; i++) {
             Event ev = new Event();
             ev.setName("Football " + i);
-            ev.setDescription("GRAMY W GAŁE");
+            ev.setDescription();
             ev.setLng(43);
             ev.setLng(44);
             ev.setDate(new Date());

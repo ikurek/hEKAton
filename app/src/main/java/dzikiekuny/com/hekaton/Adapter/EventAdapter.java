@@ -18,9 +18,9 @@ import dzikiekuny.com.hekaton.R;
  */
 
 public class EventAdapter extends BaseAdapter {
-    private Context mContext;
-    private ArrayList<Event> mDataSource;
-    private LayoutInflater mInflater;
+    private final Context mContext;
+    private final ArrayList<Event> mDataSource;
+    private final LayoutInflater mInflater;
 
 
     public EventAdapter(Context context, ArrayList<Event> events) {

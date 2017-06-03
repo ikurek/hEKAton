@@ -5,11 +5,11 @@ package dzikiekuny.com.hekaton.Models;
  */
 
 public class SportModel {
-    int drawableInt;
-    String name;
+    private int drawableInt;
+    private String name;
 
-    public SportModel(int drawableInt, String name) {
-        this.drawableInt = drawableInt;
+    public SportModel(String name) {
+        this.drawableInt = dzikiekuny.com.hekaton.R.id.tick;
         this.name = name;
     }
 

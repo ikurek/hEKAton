@@ -5,10 +5,10 @@ package dzikiekuny.com.hekaton.Models;
  */
 
 public class UserModel {
-    String name;
-    String fbid;
-    String joined;
-    String id;
+    private String name;
+    private String fbid;
+    private String joined;
+    private String id;
 
     public UserModel(String name, String fbid, String joined, String id) {
         this.name = name;
@@ -17,10 +17,10 @@ public class UserModel {
         this.joined = joined;
     }
 
-    public UserModel(String name, String fbid, String joined) {
+    public UserModel(String name, String fbid) {
         this.name = name;
         this.fbid = fbid;
-        this.joined = joined;
+        this.joined = "XD";
     }
 
     public String getId() {

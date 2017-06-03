@@ -33,7 +33,7 @@ import dzikiekuny.com.hekaton.R;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    private LatLng slodowa = new LatLng(51.116162, 17.037725);
+    private final LatLng slodowa = new LatLng(51.116162, 17.037725);
 
     private View rootView;
 

@@ -27,14 +27,14 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class DatabaseSupport {
 
     //DATA
-    DiskBasedCache cache;
-    BasicNetwork network;
-    RequestQueue mRequestQueue;
-    String facebookID;
-    UserModel myUser;
+    private final DiskBasedCache cache;
+    private final BasicNetwork network;
     //URLs
-    String usersUrl = "http://dzikiekuny.azurewebsites.net/tables/users?ZUMO-API-VERSION=2.0.0";
-    public JsonArrayRequest getUserAsRequest = new JsonArrayRequest
+    private final String usersUrl = "http://dzikiekuny.azurewebsites.net/tables/users?ZUMO-API-VERSION=2.0.0";
+    private RequestQueue mRequestQueue;
+    private String facebookID;
+    private UserModel myUser;
+    private final JsonArrayRequest getUserAsRequest = new JsonArrayRequest
             (Request.Method.GET, usersUrl, null, new Response.Listener<JSONArray>() {
 
                 @Override
@@ -88,7 +88,7 @@ public class DatabaseSupport {
     }
 
 
-    public JsonObjectRequest insertUserAsRequest(UserModel user) {
+    private JsonObjectRequest insertUserAsRequest(UserModel user) {
         JSONObject params = new JSONObject();
         try {
             params.put("name", user.getName());

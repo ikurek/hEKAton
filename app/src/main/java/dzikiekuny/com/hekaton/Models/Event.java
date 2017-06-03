@@ -1,12 +1,7 @@
 package dzikiekuny.com.hekaton.Models;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-
 import java.util.Date;
 import java.util.Map;
-
-import dzikiekuny.com.hekaton.R;
 
 public class Event {
     private String name;
@@ -56,8 +51,8 @@ public class Event {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription() {
+        this.description = "GRAMY W GAŁE";
     }
 
     public String getName() {

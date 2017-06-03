@@ -25,7 +25,7 @@ import dzikiekuny.com.hekaton.R;
  */
 
 public class AddNewActivity extends AppCompatActivity {
-    List<SportModel> userList = new ArrayList<>();
+    private final List<SportModel> userList = new ArrayList<>();
     private int mYear, mMonth, mDay, mHour, mMinute;
 
     @Override
@@ -45,10 +45,10 @@ public class AddNewActivity extends AppCompatActivity {
         mDay = c.get(Calendar.DAY_OF_MONTH);
         txtTime.setText(mHour + ":" + mMinute);
         txtDate.setText(mDay + "-" + (mMonth + 1) + "-" + mYear);
-        userList.add(new SportModel(R.id.tick, "Hitler"));
-        userList.add(new SportModel(R.id.tick, "Did"));
-        userList.add(new SportModel(R.id.tick, "Nothing"));
-        userList.add(new SportModel(R.id.tick, "Wrong"));
+        userList.add(new SportModel("Hitler"));
+        userList.add(new SportModel("Did"));
+        userList.add(new SportModel("Nothing"));
+        userList.add(new SportModel("Wrong"));
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         sports.setLayoutManager(llm);
