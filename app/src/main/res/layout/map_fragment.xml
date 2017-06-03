@@ -29,26 +29,26 @@
             android:weightSum="12"
             xmlns:android="http://schemas.android.com/apk/res/android">
 
-            <ImageView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:src="@drawable/ic_menu_camera"
-                android:gravity="center" />
+                android:layout_height="match_parent">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorAccent"
-                android:layout_weight="4"
-                android:gravity="center" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/ic_menu_camera"
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
-                android:layout_weight="3"
-                android:gravity="center" />
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/common_google_signin_btn_icon_dark_normal"
+
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
 
         </LinearLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
