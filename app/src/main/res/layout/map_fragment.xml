@@ -30,24 +30,57 @@
             xmlns:android="http://schemas.android.com/apk/res/android">
 
             <RelativeLayout
+                android:id="@+id/dragView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="false"
+                android:background="@color/colorPrimaryDark"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nameTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignTop="@+id/transparentTopSliderView"
+                    android:layout_below="@id/transparentTopSliderView"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@+id/clubPhotoCircleImageView"
+                    android:paddingTop="20dp"
+                    android:text="SIEMA"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <ImageView
+                    android:id="@+id/arrowUpImageView"
                     android:layout_width="wrap_content"
-                    android:src="@drawable/ic_menu_camera"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/nameTextView"
+                    android:layout_marginStart="10dp"
+                    android:paddingTop="20dp"
+                    android:src="@drawable/ic_menu_camera" />
 
-                    android:layout_centerHorizontal="true"
-                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/moreInfoTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/nameTextView"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/arrowUpImageView"
+                    android:layout_toStartOf="@+id/clubPhotoCircleImageView"
+                    android:paddingTop="20dp"
+                    android:text="ELO"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:src="@drawable/common_google_signin_btn_icon_dark_normal"
-
-                    android:layout_centerHorizontal="true"
-                    android:layout_height="wrap_content" />
 
             </RelativeLayout>
+
 
 
         </LinearLayout>
