@@ -20,7 +20,7 @@ public class UserModel {
     public UserModel(String name, String fbid) {
         this.name = name;
         this.fbid = fbid;
-        this.joined = "XD";
+        this.joined = "";
     }
 
     public String getId() {

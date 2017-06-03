@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import dzikiekuny.com.hekaton.Models.Event;
 import dzikiekuny.com.hekaton.Models.EventModel;
 import dzikiekuny.com.hekaton.Models.Sport;
 import dzikiekuny.com.hekaton.R;
@@ -57,8 +58,9 @@ public class EventAdapter extends BaseAdapter {
         EventModel event = mDataSource.get(position);
         title.setText(event.getName());
         subTitle.setText(event.getDeadlineDate());
+
         imageView.setImageDrawable(Sport.valueOf(event.getSportID()).getDrawable(mContext));
-        detail.setText("XD");
+       // detail.setText("XD");
 
         return cell;
     }
