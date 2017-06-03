@@ -10,7 +10,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import dzikiekuny.com.hekaton.Models.Event;
+import dzikiekuny.com.hekaton.Models.EventModel;
+import dzikiekuny.com.hekaton.Models.Sport;
 import dzikiekuny.com.hekaton.R;
 
 /**
@@ -19,11 +20,11 @@ import dzikiekuny.com.hekaton.R;
 
 public class EventAdapter extends BaseAdapter {
     private final Context mContext;
-    private final ArrayList<Event> mDataSource;
+    private final ArrayList<EventModel> mDataSource;
     private final LayoutInflater mInflater;
 
 
-    public EventAdapter(Context context, ArrayList<Event> events) {
+    public EventAdapter(Context context, ArrayList<EventModel> events) {
         mContext = context;
         mDataSource = events;
 
@@ -53,10 +54,10 @@ public class EventAdapter extends BaseAdapter {
         TextView detail = (TextView) cell.findViewById(R.id.event_detail);
         ImageView imageView = (ImageView) cell.findViewById(R.id.event_imageView);
 
-        Event event = mDataSource.get(position);
+        EventModel event = mDataSource.get(position);
         title.setText(event.getName());
-        subTitle.setText(event.getDate().toString());
-        imageView.setImageDrawable(event.getSport().getDrawable(mContext));
+        subTitle.setText(event.getDeadlineDate());
+        imageView.setImageDrawable(Sport.valueOf(event.getSportID()).getDrawable(mContext));
         detail.setText("XD");
 
         return cell;
