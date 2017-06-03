@@ -76,6 +76,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         slidingLayout.setPanelHeight(0);
         slidingLayout.setTouchEnabled(false);
 
+        slidingView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("iosdev", "clicked");
+            }
+        });
+
         mapView.getMapAsync(this);
 
         return rootView;
