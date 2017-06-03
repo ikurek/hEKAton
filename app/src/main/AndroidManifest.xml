@@ -27,6 +27,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCxhvvsYtJwEDgCsIDiMBlNk7uDU7BqAa4"/>
         <activity android:name=".EventListActivity"></activity>
+        <activity android:name=".Activity.AddNewActivity"></activity>
     </application>
 
 </manifest>
