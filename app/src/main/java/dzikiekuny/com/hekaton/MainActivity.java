@@ -17,18 +17,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.ArrayList;
-
-import dzikiekuny.com.hekaton.fragments.MapFragment;
 import dzikiekuny.com.hekaton.Activity.AddNewActivity;
+import dzikiekuny.com.hekaton.Activity.EventListActivity;
+import dzikiekuny.com.hekaton.fragments.MapFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static String MAP_STRING = "mapFragment";
     private Fragment fragment;
     private FragmentManager fragmentManager;
     private MapFragment mapFragment = new MapFragment();
     private String currentFragmentTag;
-    private static String MAP_STRING = "mapFragment";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

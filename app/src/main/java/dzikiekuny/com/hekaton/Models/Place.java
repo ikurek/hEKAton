@@ -1,4 +1,4 @@
-package dzikiekuny.com.hekaton.model;
+package dzikiekuny.com.hekaton.Models;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;

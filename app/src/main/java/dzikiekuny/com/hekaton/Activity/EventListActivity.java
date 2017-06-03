@@ -1,4 +1,4 @@
-package dzikiekuny.com.hekaton;
+package dzikiekuny.com.hekaton.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,8 +8,10 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Date;
 
+import dzikiekuny.com.hekaton.Adapter.EventAdapter;
 import dzikiekuny.com.hekaton.Models.Event;
 import dzikiekuny.com.hekaton.Models.Sport;
+import dzikiekuny.com.hekaton.R;
 
 /**
  * Created by kacperraczy on 03.06.2017.

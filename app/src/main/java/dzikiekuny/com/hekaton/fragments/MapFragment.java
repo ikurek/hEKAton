@@ -20,8 +20,8 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import dzikiekuny.com.hekaton.Models.Place;
 import dzikiekuny.com.hekaton.R;
-import dzikiekuny.com.hekaton.model.Place;
 
 /**
  * Created by wodzu on 02.06.17.

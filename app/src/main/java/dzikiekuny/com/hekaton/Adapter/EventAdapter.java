@@ -1,4 +1,4 @@
-package dzikiekuny.com.hekaton;
+package dzikiekuny.com.hekaton.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import dzikiekuny.com.hekaton.Models.Event;
+import dzikiekuny.com.hekaton.R;
 
 /**
  * Created by kacperraczy on 03.06.2017.
@@ -46,7 +47,7 @@ public class EventAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View cell = (View) mInflater.inflate(R.layout.event_cell,parent,false);
+        View cell = mInflater.inflate(R.layout.event_cell, parent, false);
         TextView title = (TextView) cell.findViewById(R.id.event_title);
         TextView subTitle = (TextView) cell.findViewById(R.id.event_subtitle);
         TextView detail = (TextView) cell.findViewById(R.id.event_detail);
