@@ -25,15 +25,9 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
     private final AddNewActivity mActivity;
 
     private int pressed = -1;
-    private int last = -1;
-    private int prelast = -1; // XD XD XD
 
     public int currentSelected() {
-        if (last == -1 || last!=pressed) {
-            return pressed;
-        } else {
-            return -1;
-        }
+        return pressed;
     }
 
     public SportAdapter(List<Sport> userList, Context context, AddNewActivity activity) {
@@ -58,29 +52,7 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
         if(position!=pressed)
             holder.tick.setVisibility(View.INVISIBLE);
         else {
-            //Log.i("Klik - pozycja", String.valueOf(position));
-            //Log.i("Last", String.valueOf(last));
-            //Log.i("Pressed", String.valueOf(pressed));
-            //Log.i("Prelast", String.valueOf(prelast));
-            if (last == pressed){
-                if (prelast==pressed) {
-                    holder.tick.setVisibility(View.VISIBLE);
-                    prelast = -1;
-                    last = -1;
-                    pressed = -1;
-                } else {
-                    holder.tick.setVisibility(View.INVISIBLE);
-                    prelast = last;
-                    last = -1;
-                    pressed = -1;
-                }
-
-            } else {
-                holder.tick.setVisibility(View.VISIBLE);
-                prelast = last;
-                last = pressed;
-                pressed = position;
-            }
+           holder.tick.setVisibility(View.VISIBLE);
 
         }
 
@@ -89,7 +61,10 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
             @Override
             public void onClick(View v) {
                 Log.i("Pozycja",Integer.toString(position));
-                pressed=position;
+                if(pressed==position)
+                    pressed = -1;
+                else
+                    pressed=position;
 
                 mActivity.refresh();
 
