@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.List;
@@ -61,10 +62,17 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
             @Override
             public void onClick(View v) {
                 Log.i("Pozycja",Integer.toString(position));
-                if(pressed==position)
+                Button b = (Button) mActivity.findViewById(R.id.save);
+                if(pressed==position) {
                     pressed = -1;
-                else
+                    b.setEnabled(false);
+                    b.setAlpha(0.5f);
+                } else{
                     pressed=position;
+                    b.setEnabled(true);
+                    b.setAlpha(1);
+                }
+
 
                 mActivity.refresh();
 
