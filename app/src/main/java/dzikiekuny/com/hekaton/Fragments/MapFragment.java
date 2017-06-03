@@ -2,6 +2,7 @@ package dzikiekuny.com.hekaton.Fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,8 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -19,6 +23,7 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -36,8 +41,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import dzikiekuny.com.hekaton.Adapter.UserViewAdapter;
 import dzikiekuny.com.hekaton.Models.EventModel;
 import dzikiekuny.com.hekaton.Models.Sport;
+import dzikiekuny.com.hekaton.Models.UserModel;
 import dzikiekuny.com.hekaton.R;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -56,11 +63,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<EventModel> events;
     private ClusterManager<EventModel> clusterManager;
     private SlidingUpPanelLayout slidingLayout;
+    RequestQueue mRequestQueue;
     private View slidingView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+    }
+    public UserModel jsonUsersParser(JSONObject userObject) throws JSONException {
+
+        return new UserModel(userObject.getString("name"), userObject.getString("fbid"), userObject.getString("joined"), userObject.getString("id"));
 
 
     }
@@ -100,7 +114,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         DiskBasedCache cache = new DiskBasedCache(getApplicationContext().getCacheDir(), 1024 * 1024); // 1MB cap   //TODO: zapytac igora
         BasicNetwork network = new BasicNetwork(new HurlStack());
-        RequestQueue mRequestQueue = new RequestQueue(cache, network);
+        mRequestQueue = new RequestQueue(cache, network);
         mRequestQueue.start();
         mRequestQueue.add(getEvents());
 
@@ -139,7 +153,61 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    private void setSlidingView(EventModel ev) {
+    private void setSlidingView(final EventModel ev) {
+        slidingView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MaterialDialog.Builder md = new MaterialDialog.Builder(getContext());
+                LayoutInflater factory = LayoutInflater.from(getContext());
+                final ArrayList<UserModel> users = new ArrayList<>();
+                final View stdView = factory.inflate(R.layout.members_layout, null);
+                ListView listView = (ListView) stdView.findViewById(R.id.users_list);
+                final UserViewAdapter adapter = new UserViewAdapter(getContext(), R.layout.user_row, users);
+                listView.setAdapter(adapter);
+                String[] splitUsers = ev.getMembers().split("☺");
+                for (int i = 0; i < splitUsers.length; ++i) {
+                    JsonObjectRequest getUser = new JsonObjectRequest(Request.Method.GET, "http://dzikiekuny.azurewebsites.net/tables/users/" + splitUsers[i] + "?ZUMO-API-VERSION=2.0.0", null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                UserModel myUser = jsonUsersParser(response);
+                                users.add(myUser);
+                                adapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO Auto-generated method stub
+
+                        }
+                    });
+                    mRequestQueue.add(getUser);
+                }
+
+
+                md.customView(stdView, false);
+                String guzik;
+                if (true)
+                    guzik = "Wyjdź";
+                else
+                    guzik = "Dolacz";
+                md.title("Bioracy udzial")
+                        .negativeText("Anuluj")
+                        .positiveText(guzik)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            }
+                        })
+                        .build()
+                        .show();
+            }
+        });
         ImageView iv = (ImageView) slidingLayout.findViewById(R.id.map_event_imageView);
         TextView title = (TextView) slidingLayout.findViewById(R.id.map_event_title);
         TextView subtitle = (TextView) slidingLayout.findViewById(R.id.map_event_subtitle);
