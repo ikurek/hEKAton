@@ -155,8 +155,20 @@ public class AddNewActivity extends AppCompatActivity {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
+                                String txtHour;
+                                if (hourOfDay < 10){
+                                    txtHour = "0"+Integer.toString(hourOfDay);
+                                } else {
+                                    txtHour = Integer.toString(hourOfDay);
+                                }
 
-                                txtTime.setText(hourOfDay + ":" + minute);
+                                String txtMin;
+                                if (minute < 10) {
+                                    txtMin = "0"+Integer.toString(minute);
+                                } else {
+                                    txtMin = Integer.toString(minute);
+                                }
+                                txtTime.setText(txtHour + ":" + txtMin);
                             }
                         }, mHour, mMinute, false);
                 timePickerDialog.show();
@@ -178,7 +190,21 @@ public class AddNewActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
 
-                                txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                String txtDay, txtMon;
+
+                                if (dayOfMonth < 10) {
+                                    txtDay = "0"+ Integer.toString(dayOfMonth);
+                                } else {
+                                    txtDay = Integer.toString(dayOfMonth);
+                                }
+
+                                if (monthOfYear < 9) {
+                                    txtMon = "0" + Integer.toString(monthOfYear+1);
+                                } else {
+                                    txtMon = Integer.toString(monthOfYear+1);
+                                }
+
+                                txtDate.setText(txtDay + "-" + txtMon + "-" + year);
 
                             }
                         }, mYear, mMonth, mDay);
