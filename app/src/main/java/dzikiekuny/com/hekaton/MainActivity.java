@@ -1,5 +1,6 @@
 package dzikiekuny.com.hekaton;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -83,7 +84,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_map) {
 
         } else if (id == R.id.nav_list) {
-
+            Intent i = new Intent(MainActivity.this, EventListActivity.class);
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
