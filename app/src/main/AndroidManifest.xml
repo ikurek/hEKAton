@@ -14,12 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBJQr9qH36UY-O_F5elR9Xnj1cu6ri3h0Y" />
+            android:value="AIzaSyCxhvvsYtJwEDgCsIDiMBlNk7uDU7BqAa4" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -29,23 +27,18 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
-        <
-        <
-        <
-        <
-        <
-        <
-        < Updated
-            upstream=======
-
-        >>>>>>> Stashed changes
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBJQr9qH36UY-O_F5elR9Xnj1cu6ri3h0Y"/>
 
         <activity
             android:name=".Activity.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -56,21 +49,9 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <
-        <
-        <
-        <
-        <
-        <
-        < Updated
-            upstream
-        <activity android:name=".Activity.AddNewActivity"></activity>
-        =======
+        <activity android:name=".Activity.EventListActivity"></activity>
 
-        <activity
-            android:name=".Activity.AddNewActivity"
-            android:windowSoftInputMode="adjustNothing" />
-        >>>>>>> Stashed changes
+        <activity android:name=".Activity.AddNewActivity" android:windowSoftInputMode="adjustNothing" ></activity>
 
     </application>
 

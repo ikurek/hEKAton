@@ -10,7 +10,8 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-import dzikiekuny.com.hekaton.Models.SportModel;
+import dzikiekuny.com.hekaton.Activity.AddNewActivity;
+import dzikiekuny.com.hekaton.Models.Sport;
 import dzikiekuny.com.hekaton.R;
 
 /**
@@ -19,22 +20,20 @@ import dzikiekuny.com.hekaton.R;
 
 public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder> {
 
-    private final List<SportModel> sportList;
+    private final List<Sport> sportList;
     private final Context mContext;
+    private final AddNewActivity mActivity;
 
-<<<<<<<Updated upstream
-    public SportAdapter(List<SportModel> userList, Context context) {
-=======
-        private int pressed = -1;
-
-    public SportAdapter(List < Sport > userList, Context context, AddNewActivity activity) {
->>>>>>>Stashed changes
-        this.sportList = userList;
-        this.mContext = context;
-    }
+    private int pressed = -1;
 
     public int currentSelected() {
         return pressed;
+    }
+
+    public SportAdapter(List<Sport> userList, Context context, AddNewActivity activity) {
+        this.sportList = userList;
+        this.mContext = context;
+        this.mActivity = activity;
     }
 
     @Override
@@ -47,18 +46,13 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-<<<<<<<Updated upstream
-        SportModel sport = sportList.get(position);
-        Log.e("TAK", String.valueOf(position));
-        holder.userAvatar.setImageDrawable(mContext.getResources().getDrawable(R.drawable.tick));
-=======
         Sport sport = sportList.get(position);
 
         holder.userAvatar.setImageDrawable((Sport.values()[position].getDrawable(this.mContext)));
-        if (position != pressed)
+        if(position!=pressed)
             holder.tick.setVisibility(View.INVISIBLE);
         else {
-            holder.tick.setVisibility(View.VISIBLE);
+           holder.tick.setVisibility(View.VISIBLE);
 
         }
 
@@ -66,18 +60,17 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
         holder.userAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Pozycja", Integer.toString(position));
-                if (pressed == position)
+                Log.i("Pozycja",Integer.toString(position));
+                if(pressed==position)
                     pressed = -1;
                 else
-                    pressed = position;
+                    pressed=position;
 
                 mActivity.refresh();
 
                 Log.i("Pressed", Integer.toString(currentSelected()));
             }
         });
->>>>>>>Stashed changes
     }
 
     @Override
@@ -93,6 +86,7 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
             super(view);
             userAvatar = (ImageView) view.findViewById(R.id.user_avatar);
             tick = (ImageView) view.findViewById(R.id.tick);
+            this.tick.setVisibility(View.INVISIBLE);
         }
     }
 }

@@ -2,22 +2,32 @@ package dzikiekuny.com.hekaton.Activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.facebook.Profile;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -31,101 +41,71 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dzikiekuny.com.hekaton.Adapter.SportAdapter;
-import dzikiekuny.com.hekaton.Models.SportModel;
+import dzikiekuny.com.hekaton.Models.EventModel;
+import dzikiekuny.com.hekaton.Models.Sport;
+import dzikiekuny.com.hekaton.Models.UserModel;
 import dzikiekuny.com.hekaton.R;
-
-<<<<<<<Updated upstream
-        =======
-        >>>>>>>Stashed changes
 
 /**
  * Created by igor on 03.06.17.
  */
 
 public class AddNewActivity extends AppCompatActivity {
-<<<<<<<Updated upstream
-    private final List<SportModel> userList = new ArrayList<>();
+
     RecyclerView sports;
-=======
     UserModel myUser;
-    List<Sport> userList = new ArrayList<>();
-    String url = "http://dzikiekuny.azurewebsites.net/tables/users?ZUMO-API-VERSION=2.0.0";
-    String url1 = "http://dzikiekuny.azurewebsites.net/tables/events?ZUMO-API-VERSION=2.0.0";
-    int PLACE_PICKER_REQUEST = 1;
-    Stashed changes
-    private int mYear, mMonth, mDay, mHour, mMinute;
     private SportAdapter adapter;
+    List<Sport> userList = new ArrayList<>();
     private int mYear, mMonth, mDay, mHour, mMinute;
     private TextView location;
->>>>>>>
+    String url = "http://dzikiekuny.azurewebsites.net/tables/users?ZUMO-API-VERSION=2.0.0";
+    String url1 = "http://dzikiekuny.azurewebsites.net/tables/events?ZUMO-API-VERSION=2.0.0";
     private Place myPlace;
-
-    {
-        @Override
-        public void onClick (View v){
-
-        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
-        try {
-            startActivityForResult(builder.build(AddNewActivity.this), PLACE_PICKER_REQUEST);
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        }
-    }
-    }
-
-=======
-        chooseLocation.setOnClickListener(new View.OnClickListener()
-
-    {
-        @Override
-        public void onClick (View v){
-        if (myUser != null) {
-            EventModel eventModel = new EventModel(name.getText().toString(),
-                    c.getTime().toString(), myUser.getId(), description.getText().toString(), "",
-                    String.valueOf(myPlace.getLatLng().latitude), String.valueOf(myPlace.getLatLng().longitude),
-                    Sport.values()[adapter.currentSelected()].toString());
-            mRequestQueue.add(insertEvent(eventModel));
-
-        }
-    }
-    })
-            save.setOnClickListener(new View.OnClickListener()
+    int PLACE_PICKER_REQUEST = 1;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_new);
+        this.setTitle("");
+        DiskBasedCache cache = new DiskBasedCache(getApplicationContext().getCacheDir(), 1024 * 1024); // 1MB cap   //TODO: zapytac igora
+        BasicNetwork network = new BasicNetwork(new HurlStack());
+        final RequestQueue mRequestQueue = new RequestQueue(cache, network);
+        mRequestQueue.start();
+        mRequestQueue.add(getUserFacebook(Profile.getCurrentProfile().getId()));
         ImageView time = (ImageView) findViewById(R.id.btn_time);
+        final EditText description = (EditText) findViewById(R.id.description);
         ImageView date = (ImageView) findViewById(R.id.btn_date);
-<<<<<<<Updated upstream
-        RecyclerView sports = (RecyclerView) findViewById(R.id.sports);
-=======
-        final EditText name = (EditText) findViewById(R.id.name);
+        final EditText name = (EditText)findViewById(R.id.name);
         Button save = (Button) findViewById(R.id.save);
         ImageView chooseLocation = (ImageView) findViewById(R.id.choose_location);
         sports = (RecyclerView) findViewById(R.id.sports);
 
->>>>>>>Stashed changes
         final TextView txtTime = (TextView) findViewById(R.id.in_time);
         final TextView txtDate = (TextView) findViewById(R.id.in_date);
+        location = (TextView) findViewById(R.id.location);
         final Calendar c = Calendar.getInstance();
+
         mHour = c.get(Calendar.HOUR_OF_DAY);
         mMinute = c.get(Calendar.MINUTE);
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
+
         txtTime.setText(mHour + ":" + mMinute);
         txtDate.setText(mDay + "-" + (mMonth + 1) + "-" + mYear);
-        userList.add(new SportModel("Hitler"));
-        userList.add(new SportModel("Did"));
-        userList.add(new SportModel("Nothing"));
-        userList.add(new SportModel("Wrong"));
+
+        for (Sport sp : Sport.values()) {
+            userList.add(sp);
+            Log.i("Wartosc sp", sp.toString());
+        }
+
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         sports.setLayoutManager(llm);
-        sports.setAdapter(new SportAdapter(userList, getApplicationContext()));
+        this.adapter = new SportAdapter(userList, getApplicationContext(), this);
+        sports.setAdapter(adapter);
+
+
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,14 +150,38 @@ public class AddNewActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-<<<<<<<Updated upstream
-    })
-}
+        chooseLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-    public void refresh() {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                try {
+                    startActivityForResult(builder.build(AddNewActivity.this), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(myUser!=null){
+                    EventModel eventModel = new EventModel(name.getText().toString(),
+                            c.getTime().toString(), myUser.getId(), description.getText().toString(), "",
+                            String.valueOf(myPlace.getLatLng().latitude), String.valueOf(myPlace.getLatLng().longitude),
+                            Sport.values()[adapter.currentSelected()].toString());
+                    mRequestQueue.add(insertEvent(eventModel));
+
+                }
+            }
+        });
+    }
+    public void refresh(){
         adapter.notifyDataSetChanged();
     }
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
@@ -188,10 +192,9 @@ public class AddNewActivity extends AppCompatActivity {
             Log.i("Result code", String.valueOf(resultCode));
         }
     }
-
     public UserModel jsonUsersParser(JSONArray users, String fbID) throws JSONException {
-        for (int i = 0; i < users.length(); ++i) {
-            if (users.getJSONObject(i).getString("fbid").equals(fbID)) {
+        for(int i = 0; i<users.length(); ++i){
+            if(users.getJSONObject(i).getString("fbid").equals(fbID)) {
                 JSONObject userObject = users.getJSONObject(i);
                 return new UserModel(userObject.getString("name"), userObject.getString("fbid"), userObject.getString("joined"), userObject.getString("id"));
             }
@@ -199,7 +202,6 @@ public class AddNewActivity extends AppCompatActivity {
         return null;
 
     }
-
     private JsonArrayRequest getUserFacebook(final String facebookID) {
         return new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -221,8 +223,7 @@ public class AddNewActivity extends AppCompatActivity {
                     }
                 });
     }
-
-    private JsonObjectRequest insertEvent(EventModel event) {
+    private JsonObjectRequest insertEvent(EventModel event){
         JSONObject params = new JSONObject();
         try {
             params.put("name", event.getName());
@@ -255,6 +256,5 @@ public class AddNewActivity extends AppCompatActivity {
             }
         });
     }
->>>>>>>Stashed changes
 
 }

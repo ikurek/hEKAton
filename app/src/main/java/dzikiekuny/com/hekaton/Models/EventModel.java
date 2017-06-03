@@ -14,7 +14,6 @@ public class EventModel {
     String lng;
     String sportID;
     String id;
-
     public EventModel(String name, String deadlineDate, String userID, String description, String members, String lat, String lng, String sportID) {
         this.name = name;
         this.deadlineDate = deadlineDate;
