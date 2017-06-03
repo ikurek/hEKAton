@@ -57,7 +57,6 @@ public class EventAdapter extends BaseAdapter {
         title.setText(event.getName());
         subTitle.setText(event.getDate().toString());
         imageView.setImageDrawable(event.getSport().getDrawable(mContext));
-        detail.setText("XD");
 
         return cell;
     }
