@@ -21,13 +21,15 @@ import com.facebook.Profile;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import dzikiekuny.com.hekaton.Activity.AddNewActivity;
-import dzikiekuny.com.hekaton.Activity.EventListActivity;
+import dzikiekuny.com.hekaton.Fragments.EventsFragment;
 import dzikiekuny.com.hekaton.Fragments.MapFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String MAP_STRING = "mapFragment";
+    private static final String EVENTS_STRING = "eventsFragment";
     private final MapFragment mapFragment = new MapFragment();
+    private final EventsFragment eventsFragment = new EventsFragment();
     private Fragment fragment;
     private FragmentManager fragmentManager;
     private String currentFragmentTag;
@@ -86,20 +88,36 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
         if(id == R.id.nav_list) {
-            Intent i = new Intent(MainActivity.this, EventListActivity.class);
-            startActivity(i);
+            startEventsFragment();
+        } else if (id == R.id.nav_home) {
+            startMapFragment();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
     private void startMapFragment(){
         if (fragment != null) {
+            fragment = mapFragment;
             fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             currentFragmentTag=MAP_STRING;
+            fragmentTransaction.replace(R.id.frameLayoutForFragments, fragment, currentFragmentTag).commit();
+        }
+
+    }
+
+    private void startEventsFragment() {
+        if (fragment != null) {
+            fragment = eventsFragment;
+            fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            currentFragmentTag = EVENTS_STRING;
             fragmentTransaction.replace(R.id.frameLayoutForFragments, fragment, currentFragmentTag).commit();
         }
 
