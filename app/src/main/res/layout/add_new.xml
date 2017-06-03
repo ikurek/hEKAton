@@ -103,14 +103,13 @@
             android:src="@drawable/ic_action_map" />
         </RelativeLayout>
     <Button
-        android:layout_width="200dp"
         android:id="@+id/save"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:text="Save"
         android:textColor="#FFFF"
-        android:theme="@style/MyButton"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
+        android:theme="@style/MyButton" />
 
 </RelativeLayout>

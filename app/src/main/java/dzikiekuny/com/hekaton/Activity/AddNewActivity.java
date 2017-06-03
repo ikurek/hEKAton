@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -54,14 +53,16 @@ public class AddNewActivity extends AppCompatActivity {
 
     RecyclerView sports;
     UserModel myUser;
-    private SportAdapter adapter;
     List<Sport> userList = new ArrayList<>();
-    private int mYear, mMonth, mDay, mHour, mMinute;
-    private TextView location;
+    RequestQueue mRequestQueue;
     String url = "http://dzikiekuny.azurewebsites.net/tables/users?ZUMO-API-VERSION=2.0.0";
     String url1 = "http://dzikiekuny.azurewebsites.net/tables/events?ZUMO-API-VERSION=2.0.0";
-    private Place myPlace;
     int PLACE_PICKER_REQUEST = 1;
+    private SportAdapter adapter;
+    private int mYear, mMonth, mDay, mHour, mMinute;
+    private TextView location;
+    private Place myPlace;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +70,8 @@ public class AddNewActivity extends AppCompatActivity {
         this.setTitle("");
         DiskBasedCache cache = new DiskBasedCache(getApplicationContext().getCacheDir(), 1024 * 1024); // 1MB cap   //TODO: zapytac igora
         BasicNetwork network = new BasicNetwork(new HurlStack());
-        final RequestQueue mRequestQueue = new RequestQueue(cache, network);
+        mRequestQueue = new RequestQueue(cache, network);
+
         mRequestQueue.start();
         mRequestQueue.add(getUserFacebook(Profile.getCurrentProfile().getId()));
         ImageView time = (ImageView) findViewById(R.id.btn_time);
@@ -170,7 +172,7 @@ public class AddNewActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(myUser!=null){
                     EventModel eventModel = new EventModel(name.getText().toString(),
-                            c.getTime().toString(), myUser.getId(), description.getText().toString(), "",
+                            c.getTime().toString(), myUser.getId(), description.getText().toString(), myUser.getId(),
                             String.valueOf(myPlace.getLatLng().latitude), String.valueOf(myPlace.getLatLng().longitude),
                             Sport.values()[adapter.currentSelected()].toString());
                     mRequestQueue.add(insertEvent(eventModel));
@@ -223,6 +225,32 @@ public class AddNewActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private JsonObjectRequest updateUser(UserModel user, String userID) {
+        JSONObject params = new JSONObject();
+        try {
+            params.put("name", user.getName());
+            params.put("fbid", user.getFbid());
+            params.put("joined", user.getJoined());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new JsonObjectRequest(Request.Method.PATCH, "http://dzikiekuny.azurewebsites.net/tables/users/" + userID + "?ZUMO-API-VERSION=2.0.0", params, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("Działa", response.toString());
+                // pDialog.hide();
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error volley", "Error: " + error.getMessage());
+                //pDialog.hide();
+            }
+        });
+    }
     private JsonObjectRequest insertEvent(EventModel event){
         JSONObject params = new JSONObject();
         try {
@@ -244,6 +272,18 @@ public class AddNewActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Działa", response.toString());
+                        UserModel newUser = new UserModel(myUser.getName(), myUser.getFbid(), myUser.getJoined(), myUser.getId());
+                        try {
+                            Log.i("ID", response.getString("id"));
+                            if (myUser.getJoined().length() < 3)
+                                newUser.setJoined(response.getString("id"));
+                            else
+                                newUser.setJoined(newUser.getJoined() + "☺" + response.getString("id"));
+                            mRequestQueue.add(updateUser(newUser, newUser.getId()));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                         finish();
                         // pDialog.hide();
                     }
@@ -256,5 +296,6 @@ public class AddNewActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }
