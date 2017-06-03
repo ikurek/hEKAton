@@ -22,9 +22,19 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
     private final List<SportModel> sportList;
     private final Context mContext;
 
+<<<<<<<Updated upstream
     public SportAdapter(List<SportModel> userList, Context context) {
+=======
+        private int pressed = -1;
+
+    public SportAdapter(List < Sport > userList, Context context, AddNewActivity activity) {
+>>>>>>>Stashed changes
         this.sportList = userList;
         this.mContext = context;
+    }
+
+    public int currentSelected() {
+        return pressed;
     }
 
     @Override
@@ -37,9 +47,37 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+<<<<<<<Updated upstream
         SportModel sport = sportList.get(position);
         Log.e("TAK", String.valueOf(position));
         holder.userAvatar.setImageDrawable(mContext.getResources().getDrawable(R.drawable.tick));
+=======
+        Sport sport = sportList.get(position);
+
+        holder.userAvatar.setImageDrawable((Sport.values()[position].getDrawable(this.mContext)));
+        if (position != pressed)
+            holder.tick.setVisibility(View.INVISIBLE);
+        else {
+            holder.tick.setVisibility(View.VISIBLE);
+
+        }
+
+
+        holder.userAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Pozycja", Integer.toString(position));
+                if (pressed == position)
+                    pressed = -1;
+                else
+                    pressed = position;
+
+                mActivity.refresh();
+
+                Log.i("Pressed", Integer.toString(currentSelected()));
+            }
+        });
+>>>>>>>Stashed changes
     }
 
     @Override
