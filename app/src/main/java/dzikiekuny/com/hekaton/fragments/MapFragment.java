@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,6 +35,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private LatLng slodowa = new LatLng(51.116162, 17.037725);
 
+    private View rootView;
+
     private MapView mapView;
     private GoogleMap googleMap;
 
@@ -50,7 +53,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.map_fragment, container, false);
+        rootView = inflater.inflate(R.layout.map_fragment, container, false);
 
         mapView = (MapView) rootView.findViewById(R.id.map_fragment);
         mapView.onCreate(savedInstanceState);
@@ -70,7 +73,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);
 
         return rootView;
-
     }
 
     @Override
@@ -105,6 +107,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public boolean onClusterItemClick(Place place) {
                 Log.i("XHaXor","Cluster item clicked");
+                ((TextView) rootView.findViewById(R.id.nameTextView)).setText(place.getTitle());
+
                 slidingLayout.setPanelHeight(300);
                 return false;
             }
