@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,8 +21,11 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import dzikiekuny.com.hekaton.Models.Place;
+import java.util.ArrayList;
+
+import dzikiekuny.com.hekaton.Models.Event;
 import dzikiekuny.com.hekaton.R;
+import dzikiekuny.com.hekaton.Models.Place;
 
 /**
  * Created by wodzu on 02.06.17.
@@ -31,8 +35,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private LatLng slodowa = new LatLng(51.116162, 17.037725);
 
+    private View rootView;
+
     private MapView mapView;
     private GoogleMap googleMap;
+
+    private ArrayList<Event> events;
 
     private ClusterManager<Place> clusterManager;
     private SlidingUpPanelLayout slidingLayout;
@@ -45,7 +53,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.map_fragment, container, false);
+        rootView = inflater.inflate(R.layout.map_fragment, container, false);
 
         mapView = (MapView) rootView.findViewById(R.id.map_fragment);
         mapView.onCreate(savedInstanceState);
@@ -65,7 +73,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);
 
         return rootView;
-
     }
 
     @Override
@@ -100,6 +107,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public boolean onClusterItemClick(Place place) {
                 Log.i("XHaXor","Cluster item clicked");
+                ((TextView) rootView.findViewById(R.id.nameTextView)).setText(place.getTitle());
+
                 slidingLayout.setPanelHeight(300);
                 return false;
             }
@@ -111,6 +120,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void addItems() {
 
+        // TODO: Download events
+
+        events = new ArrayList<Event>();
+        for (int i=0; i<10; i++){
+            events.add(new Event());
+        }
+
+        for (Event e : events) {
+            clusterManager.addItem(new Place(new LatLng(e.getLat(), e.getLng())));
+        }
+
+        // TODO: Later delete, just for tests
+
         // Set some lat/lng coordinates to start with.
         double lat = 51.116162;
         double lng = 17.037725;
@@ -120,7 +142,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             double offset = i / 100d;
             lat = lat + offset;
             lng = lng + offset;
-            Place offsetItem = new Place(lat, lng);
+            Place offsetItem = new Place(lat, lng, "Test " + Integer.toString(i));
             clusterManager.addItem(offsetItem);
         }
     }
