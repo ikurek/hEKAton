@@ -3,12 +3,13 @@ package dzikiekuny.com.hekaton;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
+
+import dzikiekuny.com.hekaton.Models.Event;
+import dzikiekuny.com.hekaton.Models.Sport;
 
 /**
  * Created by kacperraczy on 03.06.2017.

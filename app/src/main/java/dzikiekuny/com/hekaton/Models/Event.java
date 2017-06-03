@@ -1,13 +1,12 @@
-package dzikiekuny.com.hekaton;
+package dzikiekuny.com.hekaton.Models;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.support.v4.content.ContextCompat;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.Objects;
+
+import dzikiekuny.com.hekaton.R;
 
 /**
  * Created by kacperraczy on 03.06.2017.
