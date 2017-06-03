@@ -1,10 +1,15 @@
 package dzikiekuny.com.hekaton.Models;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
+import java.util.ArrayList;
+
 /**
  * Created by wodzu on 03.06.17.
  */
 
-public class EventModel {
+public class EventModel implements ClusterItem {
     String name;
     String deadlineDate;
     String userID;
@@ -77,6 +82,16 @@ public class EventModel {
         this.members = members;
     }
 
+    public ArrayList<String> getMembersIdList() {
+        String[] ids = this.members.split("☺");
+        ArrayList<String> listOfIds = new ArrayList<>();
+        for (String id : ids) {
+            listOfIds.add(id);
+        }
+
+        return listOfIds;
+    }
+
     public String getLat() {
         return lat;
     }
@@ -108,4 +123,10 @@ public class EventModel {
     public void setId(String id) {
         this.id = id;
     }
+
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(Double.valueOf(lat), Double.valueOf(lng));
+    }
+
 }

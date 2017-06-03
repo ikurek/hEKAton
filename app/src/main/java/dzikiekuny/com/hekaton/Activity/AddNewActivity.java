@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -53,16 +54,15 @@ public class AddNewActivity extends AppCompatActivity {
 
     RecyclerView sports;
     UserModel myUser;
+    private SportAdapter adapter;
     List<Sport> userList = new ArrayList<>();
+    private int mYear, mMonth, mDay, mHour, mMinute;
     RequestQueue mRequestQueue;
+    private TextView location;
     String url = "http://dzikiekuny.azurewebsites.net/tables/users?ZUMO-API-VERSION=2.0.0";
     String url1 = "http://dzikiekuny.azurewebsites.net/tables/events?ZUMO-API-VERSION=2.0.0";
-    int PLACE_PICKER_REQUEST = 1;
-    private SportAdapter adapter;
-    private int mYear, mMonth, mDay, mHour, mMinute;
-    private TextView location;
     private Place myPlace;
-
+    int PLACE_PICKER_REQUEST = 1;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -225,8 +225,7 @@ public class AddNewActivity extends AppCompatActivity {
                     }
                 });
     }
-
-    private JsonObjectRequest updateUser(UserModel user, String userID) {
+    private JsonObjectRequest updateUser(UserModel user, String userID){
         JSONObject params = new JSONObject();
         try {
             params.put("name", user.getName());
@@ -235,7 +234,7 @@ public class AddNewActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return new JsonObjectRequest(Request.Method.PATCH, "http://dzikiekuny.azurewebsites.net/tables/users/" + userID + "?ZUMO-API-VERSION=2.0.0", params, new Response.Listener<JSONObject>() {
+        return new JsonObjectRequest(Request.Method.PATCH,  "http://dzikiekuny.azurewebsites.net/tables/users/"+userID+"?ZUMO-API-VERSION=2.0.0", params,  new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -273,16 +272,16 @@ public class AddNewActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.d("Działa", response.toString());
                         UserModel newUser = new UserModel(myUser.getName(), myUser.getFbid(), myUser.getJoined(), myUser.getId());
-                        try {
-                            Log.i("ID", response.getString("id"));
-                            if (myUser.getJoined().length() < 3)
+                            try {
+                                Log.i("ID", response.getString("id"));
+                                if(myUser.getJoined().length()<3)
                                 newUser.setJoined(response.getString("id"));
-                            else
-                                newUser.setJoined(newUser.getJoined() + "☺" + response.getString("id"));
-                            mRequestQueue.add(updateUser(newUser, newUser.getId()));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                                else
+                                    newUser.setJoined(newUser.getJoined()+"☺"+response.getString("id"));
+                                mRequestQueue.add(updateUser(newUser, newUser.getId()));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
                         finish();
                         // pDialog.hide();

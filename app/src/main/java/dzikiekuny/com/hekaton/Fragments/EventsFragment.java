@@ -2,6 +2,7 @@ package dzikiekuny.com.hekaton.Fragments;
 
 
 import android.os.Bundle;
+import android.os.UserManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,20 +26,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import dzikiekuny.com.hekaton.Adapter.EventAdapter;
+import dzikiekuny.com.hekaton.Models.Event;
 import dzikiekuny.com.hekaton.Models.EventModel;
+import dzikiekuny.com.hekaton.Models.Sport;
 import dzikiekuny.com.hekaton.Models.UserModel;
 import dzikiekuny.com.hekaton.R;
 
 public class EventsFragment extends Fragment {
     String url = "http://dzikiekuny.azurewebsites.net/tables/users?ZUMO-API-VERSION=2.0.0";
     String url1 = "http://dzikiekuny.azurewebsites.net/tables/events?ZUMO-API-VERSION=2.0.0";
-    EventAdapter adapter;
-    ArrayList<EventModel> events = new ArrayList<>();
     private ListView listView;
     private UserModel myUser;
+    EventAdapter adapter;
     private RequestQueue mRequestQueue;
+    ArrayList<EventModel> events = new ArrayList<>();
     public EventsFragment() {
         // Required empty public constructor
     }
@@ -63,12 +67,12 @@ public class EventsFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.event_list_view);
 
 
+
         adapter = new EventAdapter(getActivity(), events);
         listView.setAdapter(adapter);
 
         return view;
     }
-
     private JsonArrayRequest getUserFacebook(final String facebookID) {
         return new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -78,7 +82,7 @@ public class EventsFragment extends Fragment {
                         try {
                             myUser = jsonUsersParser(response, facebookID);
                             String[] eventsID = myUser.getJoined().split("☺");
-                            for (int i = 0; i < eventsID.length; ++i) {
+                            for(int i = 0; i<eventsID.length; ++i){
                                 mRequestQueue.add(getEvent(eventsID[i]));
                             }
                         } catch (JSONException e) {
@@ -94,10 +98,9 @@ public class EventsFragment extends Fragment {
                     }
                 });
     }
-
     public UserModel jsonUsersParser(JSONArray users, String fbID) throws JSONException {
-        for (int i = 0; i < users.length(); ++i) {
-            if (users.getJSONObject(i).getString("fbid").equals(fbID)) {
+        for(int i = 0; i<users.length(); ++i){
+            if(users.getJSONObject(i).getString("fbid").equals(fbID)) {
                 JSONObject userObject = users.getJSONObject(i);
                 return new UserModel(userObject.getString("name"), userObject.getString("fbid"), userObject.getString("joined"), userObject.getString("id"));
             }
@@ -105,22 +108,20 @@ public class EventsFragment extends Fragment {
         return null;
 
     }
-
     public EventModel jsonEventParser(JSONObject eventObject) throws JSONException {
 
-        return new EventModel(eventObject.getString("name"), eventObject.getString("deadline_date"), eventObject.getString("user_id"), eventObject.getString("description"), eventObject.getString("members"), eventObject.getString("lat"), eventObject.getString("lng"), eventObject.getString("sport_id"), eventObject.getString("id"));
+            return new EventModel(eventObject.getString("name"), eventObject.getString("deadline_date"), eventObject.getString("user_id"), eventObject.getString("description"), eventObject.getString("members"), eventObject.getString("lat"), eventObject.getString("lng"), eventObject.getString("sport_id"), eventObject.getString("id"));
 
     }
-
-    private JsonObjectRequest getEvent(String eventID) {
-        Log.i("Event link", "http://dzikiekuny.azurewebsites.net/tables/events/" + eventID + "?ZUMO-API-VERSION=2.0.0");
+    private JsonObjectRequest getEvent(String eventID){
+        Log.i("Event link", "http://dzikiekuny.azurewebsites.net/tables/events/"+eventID+"?ZUMO-API-VERSION=2.0.0");
         return new JsonObjectRequest
-                (Request.Method.GET, "http://dzikiekuny.azurewebsites.net/tables/events/" + eventID + "?ZUMO-API-VERSION=2.0.0", null, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, "http://dzikiekuny.azurewebsites.net/tables/events/"+eventID+"?ZUMO-API-VERSION=2.0.0", null, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            EventModel myEvent = jsonEventParser(response);
+                            EventModel myEvent =  jsonEventParser(response);
                             events.add(myEvent);
                             adapter.notifyDataSetChanged();
 
