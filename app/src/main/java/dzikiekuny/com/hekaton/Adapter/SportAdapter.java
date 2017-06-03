@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -41,7 +40,6 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
         SportModel sport = sportList.get(position);
         Log.e("TAK", String.valueOf(position));
         holder.userAvatar.setImageDrawable(mContext.getResources().getDrawable(R.drawable.tick));
-        holder.userText.setText(sport.getName());
     }
 
     @Override
@@ -52,13 +50,11 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public final ImageView userAvatar;
         public final ImageView tick;
-        public final TextView userText;
 
         public MyViewHolder(View view) {
             super(view);
             userAvatar = (ImageView) view.findViewById(R.id.user_avatar);
             tick = (ImageView) view.findViewById(R.id.tick);
-            userText = (TextView) view.findViewById(R.id.listViewText);
         }
     }
 }

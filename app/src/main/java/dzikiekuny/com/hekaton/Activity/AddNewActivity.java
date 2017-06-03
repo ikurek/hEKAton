@@ -50,7 +50,7 @@ public class AddNewActivity extends AppCompatActivity {
         userList.add(new SportModel(R.id.tick, "Nothing"));
         userList.add(new SportModel(R.id.tick, "Wrong"));
         LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         sports.setLayoutManager(llm);
         sports.setAdapter(new SportAdapter(userList, getApplicationContext()));
         time.setOnClickListener(new View.OnClickListener() {
