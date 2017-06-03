@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import dzikiekuny.com.hekaton.Models.Event;
@@ -54,9 +55,11 @@ public class EventAdapter extends BaseAdapter {
 
         Event event = mDataSource.get(position);
         title.setText(event.getName());
-        subTitle.setText(event.getDate().toString());
+
+        SimpleDateFormat formatter = new SimpleDateFormat("d MMM hh:mm");
+        subTitle.setText(formatter.format(event.getDate()));
         imageView.setImageDrawable(event.getSport().getDrawable(mContext));
-        detail.setText("XD");
+        cell.setBackground(mContext.getDrawable(R.drawable.customshape));
 
         return cell;
     }

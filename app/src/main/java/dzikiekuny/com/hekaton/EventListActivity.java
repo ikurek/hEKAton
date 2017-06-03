@@ -1,6 +1,7 @@
 package dzikiekuny.com.hekaton;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ListView;
@@ -37,6 +38,8 @@ public class EventListActivity extends Activity {
             ev.setSport(Sport.values()[i]);
             events.add(ev);
         }
+
+        listView.setBackgroundColor(Color.parseColor("#424242"));
 
         EventAdapter adapter = new EventAdapter(this, events);
         listView.setAdapter(adapter);
