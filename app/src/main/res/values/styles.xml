@@ -13,19 +13,6 @@
         <item name="colorButtonNormal">@color/colorPrimary</item>
     </style>
 
-    <
-    <
-    <
-    <
-    <
-    <
-    < Updated upstream=======
-
-    <style name="MyButton" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">@color/colorAccent</item>
-        <item name="colorButtonNormal">@color/colorPrimary</item>
-    </style>
-    >>>>>>> Stashed changes
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
